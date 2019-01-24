@@ -28,13 +28,14 @@
 					suffix: "$"
 				},
 				data: [{
-					type: "scatter",
+					type: "spline",
 					markerType: "square",
 					markerSize: 10,
 					toolTipContent: "Phone Age: {x} yrs<br>Avg Claim Value $ {y}",
 					dataPoints: <?php echo json_encode($phoneAgeDataPoints, JSON_NUMERIC_CHECK); ?>
 				}]
 			});
+			phoneAgeChart.render();
 			var userAgeChart = new CanvasJS.Chart("userAgeContainer", {
 				animationEnabled: true,
 				exportEnabled: true,
@@ -48,17 +49,18 @@
 				},
 				axisY: {
 					title: "Avg Claim Value",
-					suffix: "$"
+					suffix: "($)",
+					includeZero: false
 				},
 				data: [{
-					type: "scatter",
+					type: "spline",
 					markerType: "square",
 					markerSize: 10,
 					toolTipContent: "User Age: {x} yrs<br>Avg Claim Value $ {y}",
 					dataPoints: <?php echo json_encode($userAgeDataPoints, JSON_NUMERIC_CHECK); ?>
 				}]
 			});
-			phoneAgeChart.render();
+			userAgeChart.render();
 		}
 	</script>
 </body>

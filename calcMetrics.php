@@ -74,12 +74,12 @@ function calcPhoneAgeCorrelation($dbConn){
 	$age_value_multiplier = 0;
 	$last_val = $average_claim_values[0];
 	foreach($average_claim_values as $val){
-		$age_value_multiplier += $val - $last_val;
+		$age_value_multiplier += ($val - $last_val) / $last_val;
 		$last_val = $val;
 	}
 	$age_value_multiplier /= count($average_claim_values);
 	$age_value_multiplier *= 100;
-	echo "<p>As a phone ages one year, its claim value changes by: $age_value_multiplier%</p>";
+	echo "<p>As a phone ages one year, its claim value changes by an average of: $age_value_multiplier%</p>";
 	echo "</div><div class = 'col-lg-6 p-0 chart-container' id = 'phoneAgeContainer'></div></div>";
 	return $phoneAgeDataPoints;
 }
@@ -92,5 +92,27 @@ function calcUserAgeCorrelation($dbConn){
 	$get_age_range_stmt->fetch();
 	$get_age_range_stmt->close();
 	echo "<p>The user age range is $min_age to $max_age with an average user age of: $avg_age years</p>";
-		
+	$age_range = $max_age - $min_age;
+	$age_sub_range = floor($age_range / 3);
+	$lwr_range = $min_age + $age_sub_range;
+	$mid_range = $lwr_range + $age_sub_range;
+	$upr_range = $mid_range + $age_sub_range;
+	echo "<p>The 3 main user age groups are: $min_age to $lwr_range, $lwr_range to $mid_range, $mid_range to $max_age";
+	$age_ranges = array($min_age, $lwr_range, $mid_range, $max_age);
+	$userAgeDataPoints = array();
+	for($i = 1; $i < 4; $i++) {
+		$i_index = $i - 1;
+		echo "<h5>Age Group $i, $age_ranges[$i_index] to $age_ranges[$i]:</h4>";
+		$get_this_grp_stmt = $dbConn->prepare("SELECT AVG(claimValue) FROM claims WHERE userAge > ? AND userAge < ?");
+		$get_this_grp_stmt->bind_param("ii", $age_ranges[$i_index], $age_ranges[$i]);
+		$get_this_grp_stmt->execute();
+		$get_this_grp_stmt->bind_result($group_avg_claim);
+		$get_this_grp_stmt->fetch();
+		$get_this_grp_stmt->close();
+		$age_range_avg = ($age_ranges[$i] + $age_ranges[$i_index]) / 2;
+		array_push($userAgeDataPoints, array("x"=> $age_range_avg, "y"=>$group_avg_claim));
+		echo "<p>Average age group claim value: $group_avg_claim</p>";
+	}
+	echo "</div><div class = 'col-lg-6 p-0 chart-container' id = 'userAgeContainer'></div</div>";
+	return $userAgeDataPoints;
 }
