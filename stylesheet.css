@@ -1,7 +1,59 @@
 .section-title {
 	text-align:center;
+	background-color: #003366;
+	color: white;
 }
 
 .chart-container {
 	height: 400px;
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+.chart-container canvas{
+	width: 100% !important;
+}
+
+.content-col {
+	padding-right: 10px !important;
+	padding-left: 10px !important;
+	padding-top: 0px !important;
+	padding-bottom: 10px !important;
+}
+
+body{
+	color: black;
+	background-color: #white;
+}
+
+hr {
+	color: white;
+	background-color: white;
+}
+
+.big-title {
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin:0;
+	background-color: #262626;
+	color: white;
+	text-align: center;
+	border-bottom: 1px solid white;
+}
+
+.section-row{
+	border-top: 2px solid black !important;
+}
+
+.total-val{
+	font-weight: bold;
+}
+
+.total-row{
+	border-top: 5px double black !important;
+	font-weight: bold;
+}
+
+.tab-stats{
+	margin-bottom: 20px;
 }
